@@ -7,7 +7,7 @@ library(tidyr)
 library(haven)
 datos <- read_dta("datos.dta")
 
-#We can directly jump to line 48 of the code where we open the already imputed database
+#We can directly jump to line 55 of the code where we open the already imputed database
 #(since NA imputation takes a long time)
 
 # ---- NA Imputation----
