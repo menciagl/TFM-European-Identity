@@ -93,7 +93,7 @@ ggplot(attachment_bin_porcentaje, aes(x = attachment_bin, y = porcentaje, fill =
   geom_text(aes(label = paste0(round(porcentaje, 1), "%")),
             vjust = -0.5, size = 4, fontface = "bold") +
   scale_y_continuous(labels = scales::percent_format(scale = 1), expand = expansion(mult = c(0, 0.1))) +
-  scale_fill_manual(values = c("#E57373", "#388E3C")) +  # tonos rojo claro y verde
+  scale_fill_manual(values = c("#E57373", "#388E3C")) +  
   labs(
     title = "European identity (EU)",
     subtitle = "Distribution of responses (%)",
@@ -140,7 +140,7 @@ country_name_map <- data.frame(
   )
 )
 
-# Mapa base
+# Base map
 library(ggplot2)
 library(mapdata)
 europe_map <- map_data("world", region = unique(country_name_map$map_name))
@@ -167,8 +167,8 @@ ggplot(data = europe_data) +
   theme_minimal() +
   theme(
     legend.position = "right",
-    panel.background = element_blank(),   # <--- SIN fondo panel
-    plot.background = element_blank(),    # <--- SIN fondo plot
+    panel.background = element_blank(),   
+    plot.background = element_blank(),    
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     plot.title = element_text(size = 15, face = "bold", hjust = 0),
@@ -182,7 +182,6 @@ ggplot(data = europe_data) +
 
 
 ggsave("Resultados/Descriptive_plot2_map.jpeg", plot = last_plot(), width = 7, height = 5, dpi = 300)
-ggsave("Resultados/Descriptive_plot2_map.png", plot = last_plot(), width = 7, height = 5, dpi = 300)
 
 
 # -- 3: Differences over time in attachment to the European Union (2020-23)  ----
@@ -263,8 +262,6 @@ ggplot(evolution_data, aes(x = year, y = percentage, color = response_group, gro
 
 
 # The same but instead of using colors, I use different lines (so it's visible in black & white)
-
-
 ggplot(evolution_data, aes(
   x = year,
   y = percentage,
@@ -274,7 +271,7 @@ ggplot(evolution_data, aes(
   geom_line(linewidth = 1.2) +
   geom_point(size = 2) +
   scale_linetype_manual(
-    values = c("Yes" = "solid", "No" = "dotted"),     # Línea continua y punteada
+    values = c("Yes" = "solid", "No" = "dotted"),     
     name = "Attachment"
   ) +
   scale_y_continuous(
@@ -300,7 +297,6 @@ ggsave("Resultados/Descriptive_plot3_dicotomic.jpeg", plot = last_plot(), width 
 
 
 # -- 4: Correlation between variables  ----
-
 datos <- datos |>
   dplyr::mutate(across(starts_with("EU_issue_"), as.factor)) |>
   dplyr::mutate(across(starts_with("importance_"), as.factor))
@@ -317,7 +313,6 @@ ggcorrplot(cor_matrix,
            lab_size = 2)      
 
 # Focus on correlation between depentent variable (attachment) and others
-
 library(tibble)
 
 cor_attachment <- cor_matrix["attachment_EU", , drop = FALSE] |> 
@@ -325,7 +320,7 @@ cor_attachment <- cor_matrix["attachment_EU", , drop = FALSE] |>
   as.data.frame() |> 
   rownames_to_column(var = "Variable") |> 
   rename(Correlation = "attachment_EU") |> 
-  filter(!Variable %in% c("attachment_EU", "year"))  # Excluir la autocorrelación
+  filter(!Variable %in% c("attachment_EU", "year"))  
 
 # Correlation plot
 ggplot(cor_attachment, aes(x = reorder(Variable, Correlation), y = Correlation)) +
@@ -353,7 +348,6 @@ ggsave("Resultados/Descriptive_plot4_cor.jpeg", plot = last_plot(), width = 8, h
 
 # -- 5: Correlation between European attachment and attachment to the EU ----
 
-
 #Inverse scale for "European attachment"
 datos <- datos |>
   dplyr::mutate(attachment_Europe = recode(as.character(attachment_Europe),
@@ -363,16 +357,17 @@ datos <- datos |>
                                 "4" = "1")) |> 
   dplyr::mutate(attachment_Europe = as.numeric(attachment_Europe))
 
+table (datos$attachment_Europe)
 
 # Correlation by country
 correlaciones_por_pais <- datos |>
   group_by(isocntry) |>
-  summarise(correlacion = cor(attachment_EU, attachment_Europe, method = "spearman", use = "complete.obs"))  # Correlación Spearman
+  summarise(correlacion = cor(attachment_EU, attachment_Europe, method = "spearman", use = "complete.obs"))  
 
 # Plot
 ggplot(correlaciones_por_pais, aes(x = reorder(isocntry, correlacion), y = correlacion, fill = correlacion)) +
   geom_bar(stat = "identity") +  # Barras para cada país
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, name = "Correlation") +  # Colores para la correlación
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0, name = "Correlation") +  
   labs(
     title = "Correlation between Attachment to EU and to Europe",
     subtitle = "Spearman correlation by country",
