@@ -13,8 +13,6 @@ datos_imp$attachment_EU <- as.factor(datos_imp$attachment_EU)
 #Delete some variables that are very similar to others
 datos_imp <- datos_imp |> select(-c(attachment_Europe, trust_EU, trust_EU_Bank, knowledge_EUworks, future_EU, population, trust_United_nations))
 
-#interests_country, trust_EU_Parliament
-
 
 # Invert the attachment scales and reduce it to 2 categories
 datos_imp$attachment_town <- recode(datos_imp$attachment_town, `4` = 1, `3` = 2, `2` = 3, `1` = 4)
@@ -99,7 +97,7 @@ classifier_RF
 plot(classifier_RF)
 
 # Save
-jpeg("Resultados/General/RF_plot3.jpeg", width = 1200, height = 800, res = 150)
+jpeg("Resultados/General/RF_plot3.jpeg", width = 1000, height = 900, res = 200)
 plot(classifier_RF)
 dev.off()
 
@@ -188,41 +186,37 @@ sink("Resultados/General/confusion_matrix_general.txt")
 print(conf_mat)
 sink()
 
-# Plot 
+# Plot
 cm_table <- conf_mat$table
 cm_df <- as.data.frame(cm_table)
 colnames(cm_df) <- c("Predicted", "Reference", "Freq")
 
 total <- sum(cm_df$Freq)
 cm_df <- cm_df |>
-  mutate(Percentage = Freq / total * 100,
-         Label = paste0(Freq, "\n", sprintf("%.1f%%", Percentage)))
+  mutate(
+    Percentage = Freq / total * 100,
+    PercentLabel = sprintf("%.1f%%", Percentage),
+    CountLabel = paste0("(", Freq, ")")
+  )
 
-# Heatmap
-confusion_plot <- ggplot(data = cm_df, aes(x = Reference, y = Predicted, fill = Freq)) +
+confusion_plot <- ggplot(data = cm_df, aes(x = Reference, y = Predicted, fill = Percentage)) +
   geom_tile(color = "black") +
-  geom_text(aes(label = Label), color = "white", size = 5) +
-  scale_fill_gradient(low = "lightblue", high = "darkblue") +
+  geom_text(aes(label = PercentLabel), color = "white", size = 6, vjust = 0.2) +
+  geom_text(aes(label = CountLabel), color = "white", size = 3.5, vjust = 2.2) +
+  scale_fill_gradient(low = "lightblue", high = "darkblue", name = "Porcentage") +
   labs(title = "Confusion Matrix",
        x = "Real Value",
        y = "Prediction") +
   theme_minimal(base_size = 15)
+
 confusion_plot
+
 # Save
 ggsave(filename = "Resultados/General/confusion_matrix_plot.jpeg", plot = confusion_plot, width = 6,height = 5, dpi = 300,device = "jpeg")
 
 # Plot important variables
 importance(model_rf_cv$finalModel)
 varImpPlot(model_rf_cv$finalModel)
-
-# Save
-jpeg("Resultados/General/RF_importance.jpeg", width = 1200, height = 1200, res = 170) 
-varImpPlot(model_rf_cv$finalModel)
-dev.off()
-
-png("Resultados/General/RF_importance.png", width = 1200, height = 1200, res = 170)
-varImpPlot(model_rf_cv$finalModel)
-dev.off()
 
 # Save the plot but with the names in a better way
 
@@ -239,20 +233,23 @@ imp_top30 <- imp_df |>
   arrange(desc(Importance)) |>
   slice(1:30)
 
-p <- ggplot(imp_top30, aes(x = reorder(Variable, Importance), y = Importance)) +
-  geom_bar(stat = "identity", fill = "steelblue") +
+p <- ggplot(imp_top30, aes(x = reorder(Variable, Importance), y = Importance, fill = Importance)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   coord_flip() +
   xlab("") +
   ylab("Variable Importance") +
-  ggtitle("Predictors of European Identity (Random Forest)") +
-  theme_minimal() +
+  ggtitle("Predictors of European Identity (Random Forest Model)") +
+  scale_fill_gradient(low = "#a6cee3", high = "#1f78b4") +
+  theme_minimal(base_size = 14) +
   theme(
-    axis.title.x = element_text(margin = margin(t = 10))  # mueve el título del eje X hacia abajo
+    plot.title = element_text(hjust = 0,size = 14),
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(margin = margin(t = 9)),
+    panel.grid.major.y = element_blank()  
   )
 
 p
 
-ggsave("Resultados/General/Variable_Importance_Plot.png", plot = p, width = 8, height = 6, dpi = 500)
 ggsave("Resultados/General/Variable_Importance_Plot.jpeg", plot = p, width = 8, height = 6, dpi = 500)
 
 
@@ -274,9 +271,6 @@ jpeg("Resultados/General/ROC_curve.jpeg", width = 800, height = 600, res = 120)
 plot(roc_obj, main = paste("ROC Curve - AUC:", round(auc_value, 3)))
 dev.off()
 
-png("Resultados/General/ROC_curve.png", width = 800, height = 600, res = 120)
-plot(roc_obj, main = paste("ROC Curve - AUC:", round(auc_value, 3)))
-dev.off()
 
 
 # ---- 3. Interpretation: logistic multilevel regression  ----
@@ -350,20 +344,20 @@ coef_df <- coef_df |>
 logistic <- ggplot(coef_df, aes(x = estimate, y = reorder(term, estimate))) +
   geom_point(color = "blue") +
   geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2, color = "blue") +
-  geom_text(aes(label = signif), nudge_x = 0.05, size = 3, color = "black") +
+  geom_text(aes(label = signif), nudge_x = 0.06, size = 3, color = "black") +
+  geom_vline(xintercept = 0, color = "black", linetype = "dashed", size = 0.23) +
   xlab("Coefficient Estimate") + 
   ylab("") +
   ggtitle("Predictors of European Identity (Logistic Mixed Model)") +
   theme_minimal() +
   theme(
-    axis.title.x = element_text(margin = margin(t = 10)),
-    axis.text.y = element_text(size = 10)
-  )
+    axis.title.x = element_text(margin = margin(t = 10), size = 11),
+    axis.text.y = element_text(size = 11),
+    plot.title = element_text(hjust = 0,size = 14))
 
 print(logistic)
 
 # Save
-ggsave("Resultados/General/logistic_model_plot.png", plot = logistic, width = 8, height = 6, dpi = 300)
 ggsave("Resultados/General/logistic_model_plot.jpeg", plot = logistic, width = 8, height = 6, dpi = 300)
 
 
@@ -397,9 +391,6 @@ jpeg("Resultados/General/pearson_residuals.jpeg", width = 800, height = 600, res
 hist(resid_plot, main = "Pearson Residuals", xlab = "Residuals", col = "skyblue", border = "white")
 dev.off()
 
-png("Resultados/General/pearson_residuals.png", width = 800, height = 600, res = 150)
-hist(resid_plot, main = "Pearson Residuals", xlab = "Residuals", col = "skyblue", border = "white")
-dev.off()
 
 # Overdispersion
 overdisp_fun <- function(model) {
