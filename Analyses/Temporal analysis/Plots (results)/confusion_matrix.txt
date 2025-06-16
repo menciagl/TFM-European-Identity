@@ -1,0 +1,116 @@
+Year: 2023 
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    0    1
+         0 1798  698
+         1 1261 4182
+                                          
+               Accuracy : 0.7532          
+                 95% CI : (0.7436, 0.7627)
+    No Information Rate : 0.6147          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.4606          
+                                          
+ Mcnemar's Test P-Value : < 2.2e-16       
+                                          
+            Sensitivity : 0.8570          
+            Specificity : 0.5878          
+         Pos Pred Value : 0.7683          
+         Neg Pred Value : 0.7204          
+             Prevalence : 0.6147          
+         Detection Rate : 0.5268          
+   Detection Prevalence : 0.6856          
+      Balanced Accuracy : 0.7224          
+                                          
+       'Positive' Class : 1               
+                                          
+--------------------------
+Year: 2022 
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    0    1
+         0 1989  720
+         1 1266 4029
+                                          
+               Accuracy : 0.7519          
+                 95% CI : (0.7423, 0.7613)
+    No Information Rate : 0.5933          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.4719          
+                                          
+ Mcnemar's Test P-Value : < 2.2e-16       
+                                          
+            Sensitivity : 0.8484          
+            Specificity : 0.6111          
+         Pos Pred Value : 0.7609          
+         Neg Pred Value : 0.7342          
+             Prevalence : 0.5933          
+         Detection Rate : 0.5034          
+   Detection Prevalence : 0.6615          
+      Balanced Accuracy : 0.7297          
+                                          
+       'Positive' Class : 1               
+                                          
+--------------------------
+Year: 2021 
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    0    1
+         0 1825  835
+         1 1375 4188
+                                          
+               Accuracy : 0.7312          
+                 95% CI : (0.7215, 0.7408)
+    No Information Rate : 0.6108          
+    P-Value [Acc > NIR] : < 2.2e-16       
+                                          
+                  Kappa : 0.4168          
+                                          
+ Mcnemar's Test P-Value : < 2.2e-16       
+                                          
+            Sensitivity : 0.8338          
+            Specificity : 0.5703          
+         Pos Pred Value : 0.7528          
+         Neg Pred Value : 0.6861          
+             Prevalence : 0.6108          
+         Detection Rate : 0.5093          
+   Detection Prevalence : 0.6765          
+      Balanced Accuracy : 0.7020          
+                                          
+       'Positive' Class : 1               
+                                          
+--------------------------
+Year: 2020 
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    0    1
+         0 2176  840
+         1 1246 3743
+                                         
+               Accuracy : 0.7394         
+                 95% CI : (0.7296, 0.749)
+    No Information Rate : 0.5725         
+    P-Value [Acc > NIR] : < 2.2e-16      
+                                         
+                  Kappa : 0.4595         
+                                         
+ Mcnemar's Test P-Value : < 2.2e-16      
+                                         
+            Sensitivity : 0.8167         
+            Specificity : 0.6359         
+         Pos Pred Value : 0.7503         
+         Neg Pred Value : 0.7215         
+             Prevalence : 0.5725         
+         Detection Rate : 0.4676         
+   Detection Prevalence : 0.6232         
+      Balanced Accuracy : 0.7263         
+                                         
+       'Positive' Class : 1              
+                                         
+--------------------------
