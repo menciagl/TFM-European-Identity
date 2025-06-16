@@ -18,11 +18,14 @@ datos_imp <- datos_imp |> select(-c(attachment_Europe, trust_EU, trust_EU_Bank, 
 datos_imp$attachment_town <- recode(datos_imp$attachment_town, `4` = 1, `3` = 2, `2` = 3, `1` = 4)
 datos_imp$attachment_town <- ifelse(as.numeric(as.character(datos_imp$attachment_town)) %in% c(1, 2), 0, 1)
 datos_imp$attachment_town <- as.factor(datos_imp$attachment_town)
+table(datos_imp$attachment_town)
 
 
 datos_imp$attachment_country <- recode(datos_imp$attachment_country, `4` = 1, `3` = 2, `2` = 3, `1` = 4)
 datos_imp$attachment_country <- ifelse(as.numeric(as.character(datos_imp$attachment_country)) %in% c(1, 2), 0, 1)
 datos_imp$attachment_country <- as.factor(datos_imp$attachment_country)
+table(datos_imp$attachment_country)
+
 
 datos_imp$attachment_EU <- recode(datos_imp$attachment_EU, `4` = 1, `3` = 2, `2` = 3, `1` = 4)
 datos_imp$attachment_EU <- ifelse(as.numeric(as.character(datos_imp$attachment_EU)) %in% c(1, 2), 0, 1)
@@ -30,7 +33,6 @@ datos_imp$attachment_EU <- as.factor(datos_imp$attachment_EU)
 table(datos_imp$attachment_EU)
 
 # Invert other variables scales
-
 datos_imp <- datos_imp |>
   mutate(
     satisfied_democracy_country = recode(satisfied_democracy_country, `1` = 4, `2` = 3, `3` = 2, `4` = 1),
@@ -72,7 +74,7 @@ sapply(datos_imp, class)
 
 
 
-# ---- 1. Preliminar analysis: Random Forest (without CV) to check best number of tress----
+# ---- 1. Preliminar analysis: Random Forest (without CV) to check best number of trees----
 
 #Split data
 library(randomForest)
@@ -131,9 +133,18 @@ registerDoParallel(cl)
 set.seed(123)
 
 datos_imp1 <- na.omit(datos_imp)
+#
+
+datos_imp1$attachment_EU <- factor(datos_imp1$attachment_EU, levels = c("0", "1"))
+
 split <- sample.split(datos_imp1$attachment_EU, SplitRatio = 0.7)
 train <- subset(datos_imp1, split == TRUE)
 test <- subset(datos_imp1, split == FALSE)
+
+# Reafirmar niveles también en train y test
+train$attachment_EU <- factor(train$attachment_EU, levels = c("0", "1"))
+test$attachment_EU <- factor(test$attachment_EU, levels = c("0", "1"))
+
 
 # Cross validation : 5 fold
 control <- trainControl(method = "cv", number = 5, allowParallel = TRUE)
@@ -163,20 +174,12 @@ jpeg("Resultados/General/RF_CVplot.jpeg", width = 900, height = 900, res = 200)
 plot(model_rf_cv)
 dev.off()
 
-png("Resultados/General/RF_CVplot.png", width = 900, height = 900, res = 200)
-plot(model_rf_cv)
-dev.off()
-
 # Confusion matrix
-predictions <- predict(model_rf_cv, newdata = test)
-conf_mat <- confusionMatrix(predictions, test$attachment_EU)
-print(conf_mat)
-
 library(caret)
 library(ggplot2)
 library(reshape2)
 
-# Calcular matriz
+# Calculate matri
 predictions <- predict(model_rf_cv, newdata = test)
 conf_mat <- confusionMatrix(predictions, test$attachment_EU, positive = "1")
 conf_mat 
@@ -219,7 +222,6 @@ importance(model_rf_cv$finalModel)
 varImpPlot(model_rf_cv$finalModel)
 
 # Save the plot but with the names in a better way
-
 imp <- importance(model_rf_cv$finalModel)
 
 var_names <- c("Year", "Discuss National Topics", "Discuss European Topics", "Rate General Situation", "Rate EU Economy", "Rate Household", "Rate Employment Country", "EU Issue Crime", "EU Issue Economy", "EU Issue Inflation", "EU Issue Tax", "EU Issue Unemployment", "EU Issue Terrorism", "EU Issue Influence", "EU Issue Immigration", "EU Issue Pensions", "EU Issue Climate", "EU Issue Energy", "EU Issue Health", "Future Country Outlook", "Trust Political Parties", "Trust Justice System", "Trust Police", "Trust Government", "Trust EU Parliament", "Satisfaction Democracy Country", "Satisfaction Democracy EU", "Perception: EU Reflects National Interests", "Attachment to Town", "Attachment to Country", "Importance of EU History", "Importance of EU Religion", "Importance of EU Values", "Importance of EU Geography", "Importance of EU Language", "Importance of EU Law", "Importance of EU Economy", "Importance of EU Culture", "Lack of Political Knowledge", "Education Level", "Gender", "Age", "Town size", "Difficulty Paying Bills", "Social Class", "Political Scale", "Response to COVID", "EU Integration Attitude", "Euro", "Government Satisfaction", "Unemployment Rate", "Gini Index", "GDP", " % Immigration", "Corruption Absence", "Inflation", "Former Communist State", "Polarization Index", "Democracy Level", "Gender Equality", "Corruption Perception", "EU Electoral Participation", "Ratio of Funds to Donors", "Region East", "Region North", "Region South")
