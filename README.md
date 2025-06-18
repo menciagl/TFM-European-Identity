@@ -33,13 +33,5 @@ Just like with the "Main and Regional analyses", we perform the **same analysis 
 The results of this analysis are presented in the **written document under section 4.3: "Temporal analysis"**
 
 
-
-
-
-
-
-
-
-
-
-Alcanzaste el límite del plan Free para GPT-4o.
+# Abstract
+This study examines the key predictors of European identity across both geographic and temporal contexts. Using Eurobarometer data (2020-2023) covering all 27 EU member states, it provides a novel contribution by systematically analyzing how these factors vary by region and over time. Methodologically, the combination of Machine Learning (Random Forest with Cross-Validation) and logistic mixed-effects models ensure both predictive accuracy and interpretability of the results. The findings confirm the central role of positive perceptions of EU responsiveness, as well as individual and macroeconomic factors as consistent predictors of European identity. However, regional differences emerge: in Southern Europe, financial hardship reduces attachment more sharply; in Central Europe, national identity plays a reinforcing role; and in Northern Europe, political engagement is key. Additionally, the effects of age and political orientation vary across regions. Regarding temporal dynamics, the predictors remain stable despite major crises —COVID-19 and the war in Ukraine—, suggesting limited short-term shifts. This study highlights the context-sensitive nature of European identity, emphasizing the need to account for regional variation in future research.
