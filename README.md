@@ -9,10 +9,9 @@ There are three main folders to consider: “Database creation,” “Descriptiv
 Inside this folder, we will find two additional subfolders:
  ### 1.1 Merging datasets
  In this subfolder, we'll find a R Script that merges all the datasets required for the analysis: the individual-level data from the Eurobarometers (2020–2023), combined with variables from several well-known sources such as Eurostat, the World Bank, the European Union, and The Economist Intelligence Unit, among others. This results in a dataset with **over 100,000 observations and approximately 70–80 variables.**
-Due to GitHub’s file size limitations, it was not possible to include the full dataset directly in the repository. Instead, this folder contains a .txt file with a link to access the complete merged dataset, as well as a .dta file with a subsample of about 2/5 of the full dataset (~40,000 observations) that is equally useful.
-This is not the final dataset we'll use, as it only merges the data but doesn't preprocess it. The cleaned and processed dataset is located in the other subfolder: “Preprocess data.”
+The dataset is uploaded in .zip format. This is not the final dataset we'll use, as it only merges the data but doesn't preprocess it. The cleaned and processed dataset is located in the other subfolder: “Preprocess data.”
 ### 1.2 Preprocess data
-In this folder, we'll find another R script where missing values are addressed, necessary imputations are performed, and some variables are discarded to prepare the dataset for analysis. Again, due to the same GitHub file size limitations, there is a .txt file containing the link to the fully processed dataset, as well as a .dta file with a 2/5 subsample that can be used.
+In this folder, we'll find another R script where missing values are addressed, necessary imputations are performed, and some variables are discarded to prepare the dataset for analysis. Again, the dataset is uploaded in .zip format. This cleaned and processed dataset will be used throughout the analyses.
 
 ## 2. DESCRIPTIVE ANALYSIS
 Here, we have an R script containing all the **descriptive analyses related to the dependent variable** to understand its distribution and characteristics. We explore how European identity changes over years and regions, how it relates to other variables through correlations, among other methods. For these analyses, the dataset used is in subfolder 1.2 "Preprocess data".
