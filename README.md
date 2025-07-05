@@ -5,7 +5,7 @@ This repository contains all the materials necessary to replicate the study from
 To replicate this work, the following instructions should be followed.
 There are three main folders to consider: “Database creation,” “Descriptive analysis,” and “Analyses.” Below, we describe the contents of each folder to help guide the replication process:
 
-## 1. DATABASE CRATION
+## 1. DATABASE CREATION
 Inside this folder, we will find two additional subfolders:
  ### 1.1 Merging datasets
  In this subfolder, we'll find a R Script that merges all the datasets required for the analysis: the individual-level data from the Eurobarometers (2020–2023), combined with variables from several well-known sources such as Eurostat, the World Bank, the European Union, and The Economist Intelligence Unit, among others. This results in a dataset with **over 100,000 observations and approximately 70–80 variables.**
